@@ -20,7 +20,7 @@ With Docker Setup
 
 Run the command below
 ```bash
-  npm run serve
+  npm run start
 ```
 
 ## Authors
