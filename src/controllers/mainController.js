@@ -6,6 +6,70 @@ import config from "../config/puppeteer.js";
 export default class MainController {
   /**
    * @swagger
+   * /preview/pdf:
+   *   get:
+   *     summary: Preview PDF
+   *     tags:
+   *       - PDF
+   *     parameters:
+   *       - in: query
+   *         name: docName
+   *         required: true
+   *         schema:
+   *           type: string
+   *           example: 312100001.pdf
+   *       - in: query
+   *         name: docPath
+   *         required: false
+   *         schema:
+   *           type: string
+   *           example: INV_PDF
+   *     responses:
+   *       200:
+   *         description: OK
+   *       400:
+   *         description: Bad Request
+   *       404:
+   *         description: Not Found
+   *       500:
+   *         description: Internal Server Error
+   */
+  static async preview(req, res) {
+    try {
+      const { docName, docPath } = req.query;
+
+      // -- validate
+      if (!docName) {
+        return res.status(400).json({ error: "docName is required" });
+      }
+
+      // -- get file
+      const pathPrefix = docPath || "";
+      const filePath = path.resolve(
+        `${config.savePath}/${pathPrefix}`,
+        docName
+      );
+
+      // -- not found
+      if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ error: "PDF not found" });
+      }
+
+      // -- send res
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", "inline; filename=" + docName);
+      const stream = fs.createReadStream(filePath);
+      stream.pipe(res);
+    } catch (err) {
+      res.status(500).json({
+        message: "Failed to preview PDF",
+        error: err.message,
+      });
+    }
+  }
+
+  /**
+   * @swagger
    * /generate/pdf:
    *   post:
    *     summary: Generate a single PDF
@@ -32,11 +96,11 @@ export default class MainController {
    *                 example: "<h1>Invoice</h1>"
    *     responses:
    *       200:
-   *         description: PDF generated successfully
+   *         description: OK
    *       400:
-   *         description: Missing docName or docHtml
+   *         description: Bad Request
    *       500:
-   *         description: Internal server error
+   *         description: Internal Server Error
    */
   static async pdf(req, res) {
     try {
@@ -118,11 +182,11 @@ export default class MainController {
    *                   example: "<h1>Invoice</h1>"
    *     responses:
    *       200:
-   *         description: PDFs generated successfully
+   *         description: OK
    *       400:
-   *         description: Array is missing or empty
+   *         description: Bad Request
    *       500:
-   *         description: Internal server error
+   *         description: Internal Server Error
    */
   static async pdfBulk(req, res) {
     try {

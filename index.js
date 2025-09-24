@@ -19,6 +19,7 @@ app.get("/", (req, res) =>
 );
 
 // -- routing
+app.get("/preview/pdf", MainController.preview);
 app.post("/generate/pdf", MainController.pdf);
 app.post("/generate/bulk/pdf", MainController.pdfBulk);
 
