@@ -1,0 +1,13 @@
+version: '1.0.0'
+
+services:
+  puppeteer-pdf:
+    build: .
+    container_name: puppeteer-pdf
+    ports:
+      - "5000:5000"
+    volumes:
+      - "D:/PDF:/app/public"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
