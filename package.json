@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node index.js"
   },
-  "author": "",
+  "author": "layhome12",
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0",

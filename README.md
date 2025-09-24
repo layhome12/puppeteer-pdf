@@ -22,7 +22,3 @@ Run the command below
 ```bash
   npm run start
 ```
-
-## Authors
-
-- [@layhome12](https://www.github.com/layhome12)
