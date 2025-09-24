@@ -24,6 +24,9 @@ export default class MainController {
    *               docName:
    *                 type: string
    *                 example: 312100001.pdf
+   *               docPath:
+   *                 type: string
+   *                 example: INV_PDF
    *               docHtml:
    *                 type: string
    *                 example: "<h1>Invoice</h1>"
@@ -37,7 +40,7 @@ export default class MainController {
    */
   static async pdf(req, res) {
     try {
-      const { docName, docHtml } = req.body;
+      const { docName, docHtml, docPath } = req.body;
 
       // -- validate
       if (!docName || !docHtml) {
@@ -67,7 +70,11 @@ export default class MainController {
       await browser.close();
 
       // -- save
-      const savePath = path.resolve(config.savePath, docName);
+      const pathPrefix = docPath || "";
+      const savePath = path.resolve(
+        `${config.savePath}/${pathPrefix}`,
+        docName
+      );
       fs.writeFileSync(savePath, pdfBuffer);
 
       res.status(200).json({
@@ -103,6 +110,9 @@ export default class MainController {
    *                 docName:
    *                   type: string
    *                   example: 312100001.pdf
+   *                 docPath:
+   *                   type: string
+   *                   example: INV_PDF
    *                 docHtml:
    *                   type: string
    *                   example: "<h1>Invoice</h1>"
@@ -150,7 +160,7 @@ export default class MainController {
       // -- generate
       const results = [];
       for (const doc of docs) {
-        const { docName, docHtml } = doc;
+        const { docName, docHtml, docPath } = doc;
 
         const page = await browser.newPage();
         await page.setContent(docHtml, {
@@ -166,12 +176,18 @@ export default class MainController {
         await page.close();
 
         // -- save
-        const savePath = path.resolve(config.savePath, docName);
+        const pathPrefix = docPath || "";
+        const savePath = path.resolve(
+          `${config.savePath}/${pathPrefix}`,
+          docName
+        );
+
         fs.writeFileSync(savePath, pdfBuffer);
 
         results.push({
           status: "00",
           docName,
+          docPath: pathPrefix,
         });
       }
 
