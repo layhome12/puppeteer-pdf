@@ -1,7 +1,7 @@
 # Puppeteer PDF
 HTML to PDF with Puppeteer JS. Minimum requirements is Node JS 18
 
-## Instalasi
+## Instalation
 
 Run the command below
 ```bash

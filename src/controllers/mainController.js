@@ -23,7 +23,7 @@ export default class MainController {
    *         required: false
    *         schema:
    *           type: string
-   *           example: INV_PDF
+   *           example: ""
    *     responses:
    *       200:
    *         description: OK
@@ -90,7 +90,7 @@ export default class MainController {
    *                 example: 312100001.pdf
    *               docPath:
    *                 type: string
-   *                 example: INV_PDF
+   *                 example: ""
    *               docHtml:
    *                 type: string
    *                 example: "<h1>Invoice</h1>"
@@ -176,7 +176,7 @@ export default class MainController {
    *                   example: 312100001.pdf
    *                 docPath:
    *                   type: string
-   *                   example: INV_PDF
+   *                   example: ""
    *                 docHtml:
    *                   type: string
    *                   example: "<h1>Invoice</h1>"
